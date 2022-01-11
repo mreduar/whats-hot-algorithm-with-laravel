@@ -14,5 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return \App\Models\Video::orderByRaw('
+        LOG10(ABS(thumbs_up - thumbs_down) + 1) *
+        SIGN(thumbs_up - thumbs_down) +
+        (UNIX_TIMESTAMP(created_at) / 300000) DESC
+    ')->limit(100)->get();
 });
